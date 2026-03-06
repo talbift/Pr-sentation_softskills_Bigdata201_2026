@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Et toi, tu réagis comment ? - G1</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f1923;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .container { width: 100%; max-width: 820px; padding: 24px; }
+
+  /* ── START ── */
+  #screen-start { text-align: center; }
+  .logo { font-size: 4em; margin-bottom: 16px; }
+  .title { font-size: 2.6em; font-weight: 900; color: #F0A500; margin-bottom: 8px; }
+  .subtitle { font-size: 1.1em; color: #8fafc0; margin-bottom: 32px; line-height: 1.6; }
+  .pills { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 36px; }
+  .pill {
+    background: #1e3248;
+    border: 1px solid #2d4a6a;
+    border-radius: 30px;
+    padding: 8px 18px;
+    font-size: 0.88em;
+    color: #B0C4D8;
+  }
+  .btn-start {
+    background: #F0A500;
+    color: #0f1923;
+    border: none;
+    padding: 16px 52px;
+    border-radius: 50px;
+    font-size: 1.15em;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .btn-start:hover { background: #ffb830; transform: scale(1.04); }
+
+  /* ── GAME ── */
+  #screen-game { display: none; }
+
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .step-label { color: #F0A500; font-weight: bold; font-size: 0.9em; }
+  .lives { font-size: 1.3em; letter-spacing: 4px; }
+  .points-badge {
+    background: #1e3248;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    color: #F0A500;
+    font-weight: bold;
+  }
+
+  .progress-bar {
+    background: #1e3248;
+    border-radius: 10px;
+    height: 6px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #F0A500, #ffb830);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+  }
+
+  .scenario-card {
+    background: #1e3248;
+    border: 1px solid #2d4a6a;
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .scenario-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 5px; height: 100%;
+    background: #F0A500;
+    border-radius: 20px 0 0 20px;
+  }
+  .scenario-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #0f1923;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.8em;
+    color: #F0A500;
+    font-weight: bold;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .scenario-emoji { font-size: 2.5em; margin-bottom: 12px; }
+  .scenario-text {
+    font-size: 1.15em;
+    line-height: 1.6;
+    color: #e8edf2;
+    font-weight: 500;
+  }
+  .scenario-question {
+    margin-top: 14px;
+    font-size: 1em;
+    color: #F0A500;
+    font-weight: bold;
+  }
+
+  .choices { display: grid; gap: 12px; }
+  .choice-btn {
+    background: #1e3248;
+    border: 2px solid #2d4a6a;
+    color: white;
+    padding: 16px 20px;
+    border-radius: 14px;
+    font-size: 0.97em;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .choice-btn:hover:not(:disabled) {
+    border-color: #F0A500;
+    background: #243b5e;
+    transform: translateX(5px);
+  }
+  .choice-icon {
+    font-size: 1.3em;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .choice-btn.best {
+    background: #0d3d28;
+    border-color: #14A085;
+    animation: glow 0.4s ease;
+  }
+  .choice-btn.ok {
+    background: #2a3a10;
+    border-color: #8aab2b;
+  }
+  .choice-btn.bad {
+    background: #3d1010;
+    border-color: #c0392b;
+  }
+  .choice-btn:disabled { cursor: default; }
+
+  @keyframes glow {
+    0% { box-shadow: none; }
+    50% { box-shadow: 0 0 20px rgba(20, 160, 133, 0.5); }
+    100% { box-shadow: none; }
+  }
+
+  .result-panel {
+    margin-top: 20px;
+    padding: 18px 22px;
+    border-radius: 14px;
+    display: none;
+    line-height: 1.6;
+  }
+  .result-panel.best { background: #0d3d28; border-left: 4px solid #14A085; }
+  .result-panel.ok   { background: #2a3a10; border-left: 4px solid #8aab2b; }
+  .result-panel.bad  { background: #3d1010; border-left: 4px solid #c0392b; }
+  .result-panel .result-header { font-weight: bold; font-size: 1.05em; margin-bottom: 6px; }
+  .result-panel .result-tip { font-size: 0.92em; color: #c8dce8; }
+  .result-panel .points-earned { float: right; font-weight: bold; font-size: 1.1em; }
+
+  .btn-next {
+    margin-top: 20px;
+    background: transparent;
+    color: #F0A500;
+    border: 2px solid #F0A500;
+    padding: 13px 36px;
+    border-radius: 50px;
+    font-size: 0.98em;
+    font-weight: bold;
+    cursor: pointer;
+    display: none;
+    transition: all 0.2s;
+  }
+  .btn-next:hover { background: #F0A500; color: #0f1923; }
+
+  /* ── RESULTS ── */
+  #screen-results { display: none; text-align: center; }
+  .trophy { font-size: 5em; margin-bottom: 16px; }
+  .final-title { font-size: 2.2em; font-weight: 900; margin-bottom: 8px; }
+  .final-score { font-size: 4em; font-weight: 900; color: #F0A500; margin-bottom: 6px; }
+  .final-max { font-size: 1.1em; color: #8fafc0; margin-bottom: 28px; }
+
+  .stars { font-size: 2.5em; letter-spacing: 6px; margin-bottom: 28px; }
+
+  .final-msg {
+    background: #1e3248;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    font-size: 1em;
+    color: #c8dce8;
+    line-height: 1.6;
+  }
+
+  .btn-replay {
+    background: #F0A500;
+    color: #0f1923;
+    border: none;
+    padding: 14px 44px;
+    border-radius: 50px;
+    font-size: 1em;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-replay:hover { background: #ffb830; transform: scale(1.04); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- START -->
+  <div id="screen-start">
+    <div class="logo">🎭</div>
+    <div class="title">Et toi, tu réagis comment ?</div>
+    <p class="subtitle">Des situations réelles du monde du travail.<br>Choisis la bonne réaction et gagne des points !</p>
+    <div class="pills">
+      <span class="pill">🎯 8 scénarios</span>
+      <span class="pill">⭐ 3 niveaux de réponse</span>
+      <span class="pill">💡 Conseils à chaque étape</span>
+    </div>
+    <button class="btn-start" onclick="startGame()">🚀 Jouer maintenant</button>
+  </div>
+
+  <!-- GAME -->
+  <div id="screen-game">
+    <div class="top-bar">
+      <span class="step-label" id="step-label">Situation 1 / 8</span>
+      <span class="lives" id="lives">❤️❤️❤️</span>
+      <span class="points-badge">⭐ <span id="pts">0</span> pts</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+
+    <div class="scenario-card">
+      <div class="scenario-tag" id="tag">tag</div>
+      <div class="scenario-emoji" id="scenario-emoji">😊</div>
+      <div class="scenario-text" id="scenario-text">texte</div>
+      <div class="scenario-question" id="scenario-question">question</div>
+    </div>
+
+    <div class="choices" id="choices"></div>
+    <div class="result-panel" id="result-panel">
+      <span class="points-earned" id="pts-earned"></span>
+      <div class="result-header" id="result-header"></div>
+      <div class="result-tip" id="result-tip"></div>
+    </div>
+    <button class="btn-next" id="btn-next" onclick="nextSituation()">Situation suivante →</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="screen-results">
+    <div class="trophy" id="trophy">🏆</div>
+    <div class="final-title" id="final-title">Résultat final</div>
+    <div class="final-score" id="final-score">0</div>
+    <div class="final-max">points sur 240</div>
+    <div class="stars" id="stars">⭐⭐⭐</div>
+    <div class="final-msg" id="final-msg">message</div>
+    <button class="btn-replay" onclick="restartGame()">🔄 Rejouer</button>
+  </div>
+
+</div>
+
+<script>
+const scenarios = [
+  {
+    tag: "🕐 Comportement · Ponctualité",
+    emoji: "😰",
+    text: "Tu dois rendre un rapport important à ton supérieur pour 9h. Il est 8h50 et tu réalises que tu as oublié de faire une partie essentielle. Tu aurais besoin d'une heure supplémentaire.",
+    question: "Que fais-tu ?",
+    choices: [
+      {
+        icon: "📧",
+        text: "Tu envoies un email à ton supérieur MAINTENANT pour le prévenir, t'excuser et proposer une nouvelle heure de remise.",
+        type: "best",
+        points: 30,
+        header: "🌟 Excellent réflexe !",
+        tip: "Prévenir à l'avance montre ton professionnalisme. Les erreurs arrivent — ce qui compte, c'est comment tu les gères. La communication proactive est toujours appréciée."
+      },
+      {
+        icon: "⏱️",
+        text: "Tu bâcles le rapport en 10 minutes pour respecter l'heure, même si le résultat est médiocre.",
+        type: "ok",
+        points: 15,
+        header: "⚠️ Pas idéal...",
+        tip: "Rendre un travail incomplet abîme ta crédibilité. Il vaut mieux prévenir et livrer quelque chose de qualité en retard que de rendre un mauvais travail à l'heure."
+      },
+      {
+        icon: "🤫",
+        text: "Tu ne dis rien et espères que ton supérieur ne remarquera pas les parties manquantes.",
+        type: "bad",
+        points: 0,
+        header: "❌ À éviter absolument !",
+        tip: "Cacher une erreur ne fait qu'empirer la situation. L'honnêteté est une valeur professionnelle fondamentale — ton supérieur remarquera et la dissimulation brisera sa confiance."
+      }
+    ]
+  },
+  {
+    tag: "💬 Communication · Écoute active",
+    emoji: "🗣️",
+    text: "Ton collègue te présente une idée pour améliorer un projet. Tu penses que son idée ne va pas fonctionner, mais il est très enthousiaste.",
+    question: "Comment réagis-tu ?",
+    choices: [
+      {
+        icon: "🤝",
+        text: "Tu l'écoutes jusqu'au bout, reformules son idée pour montrer que tu as compris, puis tu exprimes calmement tes réserves en proposant des alternatives.",
+        type: "best",
+        points: 30,
+        header: "🌟 Parfaite écoute active !",
+        tip: "Reformuler montre que tu as vraiment écouté. Exprimer un désaccord constructif tout en restant respectueux est une compétence rare et très valorisée."
+      },
+      {
+        icon: "😶",
+        text: "Tu restes silencieux et acquiesces poliment même si tu n'es pas d'accord, pour éviter le conflit.",
+        type: "ok",
+        points: 10,
+        header: "⚠️ Trop passif...",
+        tip: "Éviter le conflit à tout prix n'est pas une solution. Un désaccord exprimé avec respect est sain et constructif. Ton point de vue a de la valeur !"
+      },
+      {
+        icon: "🚫",
+        text: "Tu l'interromps après 2 minutes en disant directement que son idée ne marchera jamais.",
+        type: "bad",
+        points: 0,
+        header: "❌ Manque de respect !",
+        tip: "Interrompre et rejeter une idée brutalement blesse la relation et décourage l'initiative. L'écoute active suppose d'aller jusqu'au bout avant de réagir."
+      }
+    ]
+  },
+  {
+    tag: "🤝 Relations · Respect",
+    emoji: "😤",
+    text: "Un collègue fait régulièrement des blagues à tes dépens devant toute l'équipe. Tout le monde rit mais toi, ça te met vraiment mal à l'aise.",
+    question: "Que fais-tu ?",
+    choices: [
+      {
+        icon: "💬",
+        text: "Tu prends ton collègue à part en privé et tu lui expliques calmement que ces blagues te mettent mal à l'aise et tu lui demandes d'arrêter.",
+        type: "best",
+        points: 30,
+        header: "🌟 Très professionnel !",
+        tip: "S'adresser directement à la personne en privé est la bonne approche. Tu exprimes tes besoins avec respect sans créer une scène ou embarrasser qui que ce soit."
+      },
+      {
+        icon: "😅",
+        text: "Tu ris avec tout le monde même si tu souffres, en te disant que ça finira par s'arrêter tout seul.",
+        type: "ok",
+        points: 10,
+        header: "⚠️ Ce n'est pas durable...",
+        tip: "Subir en silence nuit à ton bien-être. Les comportements qu'on ne signale jamais ont tendance à s'amplifier. Tu as le droit de poser tes limites."
+      },
+      {
+        icon: "😡",
+        text: "Tu l'interpelles en public devant toute l'équipe en le remettant vertement à sa place.",
+        type: "bad",
+        points: 0,
+        header: "❌ Ça va s'envenimer !",
+        tip: "Confronter publiquement quelqu'un crée une escalade de conflit. Même si tu as raison, la manière compte autant que le fond."
+      }
+    ]
+  },
+  {
+    tag: "🏆 Comportement · Éthique",
+    emoji: "🤔",
+    text: "En travaillant sur un dossier, tu découvres une erreur importante commise par ton manager. Cette erreur pourrait coûter cher à l'entreprise si elle n'est pas corrigée rapidement.",
+    question: "Que fais-tu ?",
+    choices: [
+      {
+        icon: "📋",
+        text: "Tu prépares les éléments de l'erreur et tu vas voir ton manager en privé pour lui signaler le problème avec respect, en proposant une solution.",
+        type: "best",
+        points: 30,
+        header: "🌟 Comportement exemplaire !",
+        tip: "Signaler un problème en privé, avec tact et une solution, c'est le top. Tu protèges l'entreprise ET préserves la dignité de ton manager."
+      },
+      {
+        icon: "🙈",
+        text: "Tu fais semblant de ne pas avoir vu l'erreur pour éviter d'embarasser ton supérieur.",
+        type: "bad",
+        points: 0,
+        header: "❌ Manque d'éthique !",
+        tip: "Ignorer une erreur qui nuit à l'entreprise n'est pas neutre — c'est une forme de complicité. L'éthique professionnelle implique d'agir même quand c'est difficile."
+      },
+      {
+        icon: "📢",
+        text: "Tu envoies un email à toute l'équipe pour signaler l'erreur de ton manager.",
+        type: "bad",
+        points: 0,
+        header: "❌ Très maladroit !",
+        tip: "Exposer publiquement l'erreur de quelqu'un — même de bonne foi — humilie la personne et détruit la confiance. Toujours régler ce genre de problème en privé d'abord."
+      }
+    ]
+  },
+  {
+    tag: "💬 Communication · Non verbale",
+    emoji: "📱",
+    text: "Tu participes à une réunion importante avec un client externe. Tu reçois un message de ta famille que tu sais urgent.",
+    question: "Comment gères-tu la situation ?",
+    choices: [
+      {
+        icon: "🚪",
+        text: "Tu excuses poliment, tu sors discrètement de la salle 2 minutes pour gérer l'urgence, puis tu reviens en t'excusant à nouveau.",
+        type: "best",
+        points: 30,
+        header: "🌟 Très bien géré !",
+        tip: "Sortir discrètement est bien mieux que de rester présent physiquement mais absent mentalement. Les excuses montrent ton respect pour les autres participants."
+      },
+      {
+        icon: "👀",
+        text: "Tu regardes furtivement ton téléphone sous la table en essayant de ne pas te faire voir.",
+        type: "ok",
+        points: 10,
+        header: "⚠️ Ça se voit toujours...",
+        tip: "Les gens perçoivent quand quelqu'un est distrait. Le langage non verbal trahit — les regards baissés, l'absence de contact visuel envoient un message négatif au client."
+      },
+      {
+        icon: "📲",
+        text: "Tu réponds ouvertement au message en restant à ta place, l'urgence prime sur tout.",
+        type: "bad",
+        points: 0,
+        header: "❌ Très peu professionnel !",
+        tip: "Utiliser son téléphone ouvertement en réunion client montre un manque flagrant de respect. Cela donne l'image que la réunion ne t'intéresse pas."
+      }
+    ]
+  },
+  {
+    tag: "🤝 Relations · Diversité",
+    emoji: "🌍",
+    text: "Un nouveau collègue vient d'arriver dans l'équipe. Il vient d'un autre pays et a des habitudes de travail différentes des tiennes — il est plus formel et direct dans sa communication.",
+    question: "Quelle est ta réaction ?",
+    choices: [
+      {
+        icon: "🌱",
+        text: "Tu prends le temps de discuter avec lui pour comprendre sa façon de travailler et trouver ensemble un mode de fonctionnement qui vous convient à tous les deux.",
+        type: "best",
+        points: 30,
+        header: "🌟 Excellent esprit d'équipe !",
+        tip: "S'adapter et chercher un terrain commun, c'est la définition de l'intelligence relationnelle. Les équipes diversifiées sont plus créatives et performantes !"
+      },
+      {
+        icon: "😐",
+        text: "Tu le laisses s'adapter tout seul — c'est lui le nouveau, c'est normal qu'il s'intègre à vos habitudes.",
+        type: "ok",
+        points: 10,
+        header: "⚠️ Manque d'initiative...",
+        tip: "L'intégration est une responsabilité partagée. Attendre que l'autre s'adapte seul peut créer de l'isolement et rater une belle opportunité d'enrichissement mutuel."
+      },
+      {
+        icon: "🙄",
+        text: "Tu te plaints à tes collègues de ses différences, en disant qu'il devrait travailler comme tout le monde.",
+        type: "bad",
+        points: 0,
+        header: "❌ Comportement négatif !",
+        tip: "Critiquer les différences dans le dos de quelqu'un nuit à la cohésion d'équipe et peut être une forme de discrimination. La diversité est une richesse à accueillir."
+      }
+    ]
+  },
+  {
+    tag: "🏆 Comportement · Fiabilité",
+    emoji: "😬",
+    text: "Tu avais promis à deux collègues de l'aide sur leurs projets respectifs pour aujourd'hui. Tu réalises que tu ne pourras pas tout faire et devras décevoir l'un d'eux.",
+    question: "Que fais-tu ?",
+    choices: [
+      {
+        icon: "🗣️",
+        text: "Tu contactes les deux dès maintenant, tu expliques honnêtement la situation et tu proposes une solution concrète (reporter, trouver quelqu'un d'autre, prioriser).",
+        type: "best",
+        points: 30,
+        header: "🌟 Très responsable !",
+        tip: "Prévenir tôt et proposer une solution, c'est le signe d'une personne fiable même dans les imprévus. La fiabilité ne veut pas dire être parfait, mais être honnête."
+      },
+      {
+        icon: "🎲",
+        text: "Tu choisis d'aider celui dont le projet te semble le plus urgent et tu ignores le message de l'autre.",
+        type: "ok",
+        points: 10,
+        header: "⚠️ Demi-mesure...",
+        tip: "Prioriser sans communiquer laisse l'autre dans le flou. Il aurait pu trouver une autre solution s'il avait su. La communication proactive évite beaucoup de frustrations."
+      },
+      {
+        icon: "🏃",
+        text: "Tu essaies de faire les deux à la va-vite en rendant un travail bâclé aux deux collègues.",
+        type: "bad",
+        points: 0,
+        header: "❌ Mauvaise stratégie !",
+        tip: "Rendre un travail de mauvaise qualité à deux personnes est pire que d'en décevoir une honnêtement. Ta réputation en prend un coup dans les deux cas."
+      }
+    ]
+  },
+  {
+    tag: "💬 Communication · Expression",
+    emoji: "😕",
+    text: "Lors d'une réunion, ton responsable attribue une de tes idées à un autre collègue sans te citer. Tu es frustré(e) mais tu n'es pas sûr(e) que c'était intentionnel.",
+    question: "Comment réagis-tu ?",
+    choices: [
+      {
+        icon: "✋",
+        text: "Après la réunion, tu demandes un moment à ton responsable en privé et tu lui signales calmement que cette idée était la tienne, sans l'accuser.",
+        type: "best",
+        points: 30,
+        header: "🌟 Maîtrise parfaite !",
+        tip: "Parler en privé, sans accusation, en nommant les faits — c'est la communication assertive par excellence. Tu défends tes droits tout en préservant la relation."
+      },
+      {
+        icon: "🙊",
+        text: "Tu ne dis rien pour ne pas créer de tension, mais tu rumines la situation pendant plusieurs jours.",
+        type: "ok",
+        points: 10,
+        header: "⚠️ Frustration qui s'accumule...",
+        tip: "Ravaler sa frustration sans l'exprimer nuit à ton bien-être et à la relation à long terme. Apprendre à s'exprimer avec calme est une compétence qui se travaille."
+      },
+      {
+        icon: "📢",
+        text: "Tu l'interromps immédiatement pendant la réunion pour réclamer la paternité de ton idée devant tout le monde.",
+        type: "bad",
+        points: 0,
+        header: "❌ Trop impulsif !",
+        tip: "Réagir à chaud en public peut te faire paraître agressif même si tu as raison. Les émotions fortes en réunion nuisent à ton image professionnelle."
+      }
+    ]
+  }
+];
+
+let currentIdx = 0;
+let totalPoints = 0;
+let lives = 3;
+let answered = false;
+
+function startGame() {
+  document.getElementById('screen-start').style.display = 'none';
+  document.getElementById('screen-game').style.display = 'block';
+  showSituation();
+}
+
+function showSituation() {
+  answered = false;
+  const s = scenarios[currentIdx];
+  document.getElementById('step-label').textContent = `Situation ${currentIdx + 1} / ${scenarios.length}`;
+  document.getElementById('lives').textContent = '❤️'.repeat(lives) + '🖤'.repeat(3 - lives);
+  document.getElementById('pts').textContent = totalPoints;
+  document.getElementById('prog').style.width = ((currentIdx / scenarios.length) * 100) + '%';
+  document.getElementById('tag').textContent = s.tag;
+  document.getElementById('scenario-emoji').textContent = s.emoji;
+  document.getElementById('scenario-text').textContent = s.text;
+  document.getElementById('scenario-question').textContent = '👉 ' + s.question;
+
+  const choicesDiv = document.getElementById('choices');
+  choicesDiv.innerHTML = '';
+  s.choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-icon">${c.icon}</span><span>${c.text}</span>`;
+    btn.onclick = () => selectChoice(i);
+    choicesDiv.appendChild(btn);
+  });
+
+  document.getElementById('result-panel').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'none';
+}
+
+function selectChoice(index) {
+  if (answered) return;
+  answered = true;
+
+  const s = scenarios[currentIdx];
+  const choice = s.choices[index];
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(b => b.disabled = true);
+
+  btns[index].classList.add(choice.type);
+
+  if (choice.type !== 'best') {
+    lives = Math.max(0, lives - 1);
+    // also highlight best answer
+    s.choices.forEach((c, i) => {
+      if (c.type === 'best') btns[i].classList.add('best');
+    });
+  }
+
+  totalPoints += choice.points;
+  document.getElementById('pts').textContent = totalPoints;
+  document.getElementById('lives').textContent = '❤️'.repeat(lives) + '🖤'.repeat(3 - lives);
+
+  const panel = document.getElementById('result-panel');
+  panel.className = 'result-panel ' + choice.type;
+  const ptsText = choice.points > 0 ? `+${choice.points} pts` : '0 pt';
+  document.getElementById('pts-earned').textContent = ptsText;
+  document.getElementById('result-header').textContent = choice.header;
+  document.getElementById('result-tip').textContent = choice.tip;
+  panel.style.display = 'block';
+
+  const btn = document.getElementById('btn-next');
+  btn.style.display = 'inline-block';
+  btn.textContent = currentIdx < scenarios.length - 1 ? 'Situation suivante →' : 'Voir mon résultat 🏆';
+}
+
+function nextSituation() {
+  currentIdx++;
+  if (currentIdx < scenarios.length) {
+    showSituation();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('screen-game').style.display = 'none';
+  document.getElementById('screen-results').style.display = 'block';
+
+  const max = 240;
+  const pct = totalPoints / max;
+
+  document.getElementById('final-score').textContent = totalPoints;
+
+  let trophy, title, stars, msg;
+  if (pct >= 0.9) {
+    trophy = '🏆'; title = 'Expert professionnel !';
+    stars = '⭐⭐⭐';
+    msg = "Tu maîtrises parfaitement les compétences relationnelles et comportementales. Tu es un(e) vrai(e) professionnel(le) ! Tes collègues ont de la chance de travailler avec toi.";
+  } else if (pct >= 0.7) {
+    trophy = '🥇'; title = 'Très bonne réactivité !';
+    stars = '⭐⭐✨';
+    msg = "Tu gères la majorité des situations avec professionnalisme. Quelques réflexes à affiner mais tu as de très belles bases pour réussir en milieu de travail.";
+  } else if (pct >= 0.5) {
+    trophy = '🥈'; title = 'Bonne progression !';
+    stars = '⭐✨✨';
+    msg = "Tu as les bonnes intentions mais certaines situations t'ont mis(e) en difficulté. Continue à travailler sur la communication assertive et l'écoute active !";
+  } else {
+    trophy = '🌱'; title = 'En apprentissage !';
+    stars = '✨✨✨';
+    msg = "Ce jeu montre bien que les compétences professionnelles s'apprennent ! Le module G1 est fait pour toi — chaque situation difficile est une occasion de grandir.";
+  }
+
+  document.getElementById('trophy').textContent = trophy;
+  document.getElementById('final-title').textContent = title;
+  document.getElementById('stars').textContent = stars;
+  document.getElementById('final-msg').textContent = msg;
+}
+
+function restartGame() {
+  currentIdx = 0;
+  totalPoints = 0;
+  lives = 3;
+  document.getElementById('screen-results').style.display = 'none';
+  document.getElementById('screen-game').style.display = 'block';
+  showSituation();
+}
+</script>
+</body>
+</html>
