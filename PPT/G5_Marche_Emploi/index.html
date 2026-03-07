@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Présentation interactive sur le marché d'emploi — 4 présentateurs, format slides." />
+    <title>Marché d'emploi | Présentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+    <!-- ===================================================
+     HEADER TOOLBAR
+=================================================== -->
+    <header class="toolbar" role="toolbar" aria-label="Barre de présentation">
+        <div class="toolbar-left">
+            <span class="logo">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                    <circle cx="11" cy="11" r="10" stroke="var(--accent)" stroke-width="1.8" />
+                    <path d="M6 14l3.5-6 3.5 4 3.5-5.5" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                CarrièrePro
+            </span>
+        </div>
+
+        <div class="toolbar-center">
+            <button class="nav-arrow" id="prevSlide" aria-label="Slide précédente">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                    <path d="M11 4L6 9l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+            <div class="slide-counter">
+                <span id="slideNum">1</span>
+
+                <span id="slideTotal">12</span>
+            </div>
+            <button class="nav-arrow" id="nextSlide" aria-label="Slide suivante">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                    <path d="M7 4l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="toolbar-right">
+            <button class="tool-btn" id="themeToggle" aria-label="Mode clair/sombre">
+                <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" />
+                    <line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <line x1="12" y1="20" x2="12" y2="22" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="2" y1="12" x2="4" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <line x1="20" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                </svg>
+                <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+            <button class="tool-btn" id="fullscreenBtn" aria-label="Plein écran">
+                <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+                    <path d="M2 6V2h4M11 2h4v4M15 11v4h-4M6 15H2v-4" stroke="currentColor" stroke-width="1.6"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+            <button class="tool-btn" id="downloadPdf" aria-label="Télécharger PDF">
+                <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+                    <path d="M8.5 2v9M5.5 8l3 3 3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <rect x="2" y="12" width="13" height="3" rx="1" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- progress bar -->
+    <div class="progress-wrap" role="progressbar" aria-label="Progression" aria-valuenow="0" aria-valuemin="0"
+        aria-valuemax="100" id="progressWrap">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- dot navigation -->
+    <nav class="dot-nav" id="dotNav" aria-label="Navigation par slide"></nav>
+
+    <!-- ===================================================
+     SLIDE DECK
+=================================================== -->
+    <main class="deck" id="deck" aria-label="Présentation">
+
+        <!-- ===== SLIDE 1 : HERO ===== -->
+        <section class="slide active" data-slide="1" aria-labelledby="s1-title">
+            <div class="slide-bg-shapes" aria-hidden="true">
+                <div class="shape s1"></div>
+                <div class="shape s2"></div>
+                <div class="shape s3"></div>
+            </div>
+            <div class="slide-content hero-content">
+                <div class="hero-badge">Guide Interactif · Soft Skills</div>
+                <h1 id="s1-title" class="hero-title">Comment se situer<br />par rapport au<br /><em>marché
+                        d'emploi&nbsp;?</em></h1>
+                <p class="hero-sub">Analyse des objectifs professionnels pour créer un <strong>plan de
+                        carrière</strong><br class="br-desktop" /> et maîtriser les <strong>techniques de recherche
+                        d'emploi</strong>.</p>
+                <p class="hero-accroche">"Comprendre le marché, clarifier sa valeur, agir."</p>
+                <div class="hero-bullets">
+                    <div class="h-bullet">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <circle cx="10" cy="10" r="9" stroke="var(--accent)" stroke-width="1.5" />
+                            <path d="M6 10l3 3 5-6" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <strong>Marché</strong>
+                    </div>
+                    <div class="h-bullet">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <circle cx="10" cy="10" r="9" stroke="var(--p2c)" stroke-width="1.5" />
+                            <path d="M6 10l3 3 5-6" stroke="var(--p2c)" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <strong>Objectifs</strong>
+                    </div>
+                    <div class="h-bullet">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <circle cx="10" cy="10" r="9" stroke="var(--p3c)" stroke-width="1.5" />
+                            <path d="M6 10l3 3 5-6" stroke="var(--p3c)" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <strong>Recherche d'emploi</strong>
+                    </div>
+                </div>
+                <div class="presenter-bar">
+                    <div class="pbar-item c1"><span>Marché &amp; Diagnostic</span></div>
+                    <div class="pbar-item c2"><span>Objectifs &amp; Plan</span></div>
+                    <div class="pbar-item c3"><span>Recherche &amp; Stratégie</span></div>
+                    <div class="pbar-item c4"><span>Négociation &amp; Bilan</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SLIDE 2 : SOMMAIRE ===== -->
+        <section class="slide" data-slide="2" aria-labelledby="s2-title">
+            <div class="slide-content">
+                <span class="slide-tag">Sommaire</span>
+                <h2 id="s2-title">Plan de la présentation</h2>
+                <div class="toc-grid">
+                    <div class="toc-block c1">
+                        <div class="toc-header"><strong>Slides 1–3</strong></div>
+                        <ul>
+                            <li><span>01</span> Introduction & accroche</li>
+                            <li><span>02</span> Se situer sur le marché</li>
+                            <li><span>03</span> Analyse du profil (Radar)</li>
+                        </ul>
+                    </div>
+                    <div class="toc-block c2">
+                        <div class="toc-header"><strong>Slides 4–6</strong></div>
+                        <ul>
+                            <li><span>04</span> Diagnostic personnel</li>
+                            <li><span>05</span> Objectifs SMART</li>
+                            <li><span>06</span> Plan de carrière (4 piliers)</li>
+                        </ul>
+                    </div>
+                    <div class="toc-block c3">
+                        <div class="toc-header"><strong>Slides 7–9</strong></div>
+                        <ul>
+                            <li><span>07</span> Simulation d'entretien</li>
+                            <li><span>08</span> CV, LinkedIn &amp; Réseau</li>
+                            <li><span>09</span> Négociation &amp; décision</li>
+                        </ul>
+                    </div>
+                    <div class="toc-block c4">
+                        <div class="toc-header"><strong>Slides 10–12</strong></div>
+                        <ul>
+                            <li><span>10</span> Plan d'action 7 jours</li>
+                            <li><span>11</span> Conclusion &amp; Export</li>
+                            <li><span>12</span> Quiz Final</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SLIDE 3 : MARCHÉ + RADAR ===== -->
+        <section class="slide" data-slide="3" aria-labelledby="s3-title">
+            <div class="slide-content slide-two-col">
+                <div class="col-left">
+                    <span class="slide-tag">Section 1</span>
+                    <h2 id="s3-title">Se situer sur le marché</h2>
+                    <p class="slide-lead">Cartographiez votre environnement avant d'agir.</p>
+                    <ul class="icon-list">
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M9 2v14M2 9h14" stroke="var(--accent)" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <div><strong>Secteur :</strong> choisir 1–2 secteurs prioritaires (tech, finance, santé…)
+                            </div>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M9 2v14M2 9h14" stroke="var(--accent)" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <div><strong>Métier cible :</strong> 2–3 intitulés précis, pas génériques</div>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M9 2v14M2 9h14" stroke="var(--accent)" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <div><strong>Seniorité :</strong> junior (0–2 ans), confirmé (3–5 ans), senior (6+)</div>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M9 2v14M2 9h14" stroke="var(--accent)" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <div><strong>Mode :</strong> présentiel, hybride ou full remote — soyez explicite</div>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M2 13l3.5-6 3.5 4 3.5-5 3.5 4" stroke="var(--accent)" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div><strong>Indicateurs :</strong> volume d'offres, compétences récurrentes, grille
+                                salariale</div>
+                        </li>
+                    </ul>
+                    <div class="tip-box">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <circle cx="8" cy="8" r="7" stroke="var(--warning)" stroke-width="1.3" />
+                            <path d="M8 5v4" stroke="var(--warning)" stroke-width="1.3" stroke-linecap="round" />
+                            <circle cx="8" cy="11.5" r="0.7" fill="var(--warning)" />
+                        </svg>
+                        Comparez les 5 compétences les plus demandées dans les offres à vos compétences actuelles —
+                        c'est votre feuille de route.
+                    </div>
+                </div>
+                <div class="col-right radar-panel">
+                    <h3>Mon radar de compétences</h3>
+                    <p class="small">Ajustez les curseurs (0→10) pour visualiser votre profil.</p>
+                    <canvas id="radarCanvas" width="260" height="260" role="img"
+                        aria-label="Graphique radar de compétences"></canvas>
+                    <div class="radar-controls" id="radarControls"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SLIDE 4 : DIAGNOSTIC ===== -->
+        <section class="slide" data-slide="4" aria-labelledby="s4-title">
+            <div class="slide-content slide-two-col">
+                <div class="col-left">
+                    <span class="slide-tag">Section 2</span>
+                    <h2 id="s4-title">Diagnostic personnel</h2>
+                    <p class="slide-lead">Les preuves comptent plus que les titres.</p>
+                    <h3 style="font-size:0.95rem;margin-bottom:.6rem;">Matrice de compétences</h3>
+                    <div class="skills-matrix" id="skillsMatrix"></div>
+                    <button class="ghost-btn" id="addSkillBtn">
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                            <path d="M6.5 2v9M2 6.5h9" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" />
+                        </svg>
+                        Ajouter
+                    </button>
+                    <h3 style="font-size:0.95rem;margin-top:1.2rem;margin-bottom:.6rem;">Checklist de préparation</h3>
+                    <div class="checklist" id="diagChecklist" role="group" aria-label="Checklist diagnostic"></div>
+                </div>
+                <div class="col-right">
+                    <h3 style="font-size:.95rem;margin-bottom:.75rem;">Reformulation : de l'ordinaire à l'impact</h3>
+                    <div class="proof-card">
+                        <div class="proof-before">
+                            <span class="proof-tag danger">Avant</span>
+                            "J'ai géré des projets et travaillé avec les équipes."
+                        </div>
+                        <div class="proof-arrow" aria-hidden="true">↓ Ajoutez verbes + métriques</div>
+                        <div class="proof-after">
+                            <span class="proof-tag success">Après</span>
+                            "J'ai piloté 3 projets cross-fonctionnels (budget 150k€) et réduit les délais de livraison
+                            de 20%."
+                        </div>
+                    </div>
+                    <h3 style="font-size:.95rem;margin-top:1.25rem;margin-bottom:.5rem;">Méthode STAR pour chaque
+                        expérience</h3>
+                    <div class="star-grid">
+                        <div class="star-card"><strong>S</strong>ituation<p>Le contexte en 1 phrase</p>
+                        </div>
+                        <div class="star-card"><strong>T</strong>âche<p>Votre rôle précis</p>
+                        </div>
+                        <div class="star-card"><strong>A</strong>ction<p>Ce que VOUS avez fait</p>
+                        </div>
+                        <div class="star-card"><strong>R</strong>ésultat<p>Impact chiffré</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SLIDE 5 : OBJECTIFS SMART ===== -->
+        <section class="slide" data-slide="5" aria-labelledby="s5-title">
+            <div class="slide-content">
+                <span class="slide-tag">Section 3</span>
+                <h2 id="s5-title">Objectifs professionnels</h2>
+                <p class="slide-lead">Un objectif flou produit un résultat flou.</p>
+                <div class="smart-row">
+                    <div class="smart-card s-card">
+                        <div class="smart-letter">S</div>
+                        <span class="sw">Spécifique</span>
+                        <p>Nommez exactement le poste, l'entreprise type, le secteur.</p>
+                    </div>
+                    <div class="smart-card m-card">
+                        <div class="smart-letter">M</div>
+                        <span class="sw">Mesurable</span>
+                        <p>Fixez des indicateurs : nb de candidatures/semaine.</p>
+                    </div>
+                    <div class="smart-card a-card">
+                        <div class="smart-letter">A</div>
+                        <span class="sw">Atteignable</span>
+                        <p>Vérifiez la cohérence avec votre profil et le marché.</p>
+                    </div>
+                    <div class="smart-card r-card">
+                        <div class="smart-letter">R</div>
+                        <span class="sw">Réaliste</span>
+                        <p>Tenez compte des contraintes géo, salariales, secteur.</p>
+                    </div>
+                    <div class="smart-card t-card">
+                        <div class="smart-letter">T</div>
+                        <span class="sw">Temporel</span>
+                        <p>Définissez une date limite précise pour chaque objectif.</p>
+                    </div>
+                </div>
+                <div class="slide-two-col" style="margin-top:1.75rem;gap:2rem;">
+                    <div>
+                        <h3 style="font-size:.95rem;margin-bottom:.75rem;">Choisir un axe de développement</h3>
+                        <div class="axis-selector" id="axisSelector" role="group" aria-label="Axe de carrière">
+                            <button class="axis-btn active" data-axis="expertise">🎯 Expertise tech</button>
+                            <button class="axis-btn" data-axis="management">👥 Management</button>
+                            <button class="axis-btn" data-axis="produit">📦 Produit</button>
+                            <button class="axis-btn" data-axis="data">📊 Data / IA</button>
+                            <button class="axis-btn" data-axis="entrepreneuriat">🚀 Entrepreneuriat</button>
+                        </div>
+                        <div class="axis-desc" id="axisDesc"></div>
+                    </div>
+                    <div>
+                        <h3 style="font-size:.95rem;margin-bottom:.75rem;">Timeline d'objectifs</h3>
+                        <div class="timeline-editor" id="timelineEditor"></div>
+                        <button class="ghost-btn" id="addTimelineItem">
+                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                                <path d="M6.5 2v9M2 6.5h9" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            Ajouter un objectif
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SLIDE 6 : PLAN DE CARRIÈRE ===== -->
+        <section class="slide" data-slide="6" aria-labelledby="s6-title">
+            <div class="slide-content">
+                <span class="slide-tag">Section 4</span>
+                <h2 id="s6-title">Plan de carrière</h2>
+                <p class="slide-lead">Transformez l'écart entre votre situation et votre cible en actions concrètes.</p>
+                <div class="gap-row">
+                    <div class="gap-box current-box">
+                        <div class="gap-icon">📍</div>
+                        <h4>Où je suis</h4>
+                        <p>Poste, compétences, niveau actuel</p>
+                    </div>
+                    <div class="gap-arrow-col" aria-hidden="true">
+                        <svg width="48" height="20" viewBox="0 0 48 20" fill="none">
+                            <path d="M2 10h40M36 4l8 6-8 6" stroke="var(--accent)" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>Écarts → Actions</span>
+                    </div>
+                    <div class="gap-box target-box">
+                        <div class="gap-icon">🎯</div>
+                        <h4>Où je veux aller</h4>
+                        <p>Poste cible, compétences à acquérir</p>
+                    </div>
+                </div>
+                <div class="pillars-row">
+                    <div class="pillar">
+                        <div class="p-icon">🧠</div>
+                        <h4>Compétences</h4>
+                        <p>Formations, certifications, side projects pour combler les écarts.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="p-icon">🛠️</div>
+                        <h4>Projets</h4>
+                        <p>Portfolio GitHub, contributions open source, freelance.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="p-icon">🤝</div>
+                        <h4>Réseau</h4>
+                        <p>Coffee chats, événements, 2 nouvelles connexions/semaine.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="p-icon">📢</div>
+                        <h4>Visibilité</h4>
+                        <p>Posts LinkedIn, articles — devenez visible dans votre domaine.</p>
+                    </div>
+                </div>
+                <div class="action-table-wrap">
+                    <table class="action-table" id="actionTable" aria-label="Plan d'actions">
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>Pilier</th>
+                                <th>Échéance</th>
+                                <th>Statut</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="actionTableBody"></tbody>
+                    </table>
+                </div>
+                <button class="ghost-btn" id="addActionBtn" style="margin-top:.75rem;">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <path d="M6.5 2v9M2 6.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                    Ajouter une action
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ===== SLIDE 7 : FLASHCARDS ENTRETIEN ===== -->
+        <section class="slide" data-slide="7" aria-labelledby="s7-title">
+            <div class="slide-content flash-layout">
+                <div class="flash-left">
+                    <span class="slide-tag">Section 5</span>
+                    <h2 id="s7-title">Simulation d'entretien</h2>
+                    <p class="slide-lead">Cliquez sur la carte pour révéler la réponse modèle.</p>
+                    <div class="flashcard-wrap" id="flashcardWrap">
+                        <div class="flashcard" id="flashcard" role="button" tabindex="0"
+                            aria-label="Flashcard - cliquez pour retourner">
+                            <div class="flashcard-inner" id="flashcardInner">
+                                <div class="flashcard-front" id="flashFront"></div>
+                                <div class="flashcard-back" id="flashBack"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flash-nav" role="group" aria-label="Navigation flashcards">
+                        <button class="nav-arrow-sm" id="prevFlash" aria-label="Question précédente">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                <path d="M9 3L4 7l5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                        <span id="flashCounter" aria-live="polite">1 / 8</span>
+                        <button class="nav-arrow-sm" id="nextFlash" aria-label="Question suivante">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                <path d="M5 3l5 4-5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="flash-right">
+                    <h3>Conseils généraux</h3>
+                    <ul class="arrow-list">
+                        <li><strong>Structure "passé-présent-futur"</strong> pour "Parlez-moi de vous" (90 s max)</li>
+                        <li><strong>STAR</strong> pour toutes les questions situationnelles</li>
+                        <li><strong>Points faibles :</strong> choisissez un point non critique + plan d'amélioration
+                        </li>
+                        <li><strong>Fin d'entretien :</strong> toujours 2–3 questions pertinentes à poser</li>
+                        <li><strong>Salaire :</strong> ancrez 10–15% au-dessus de votre cible minimale</li>
+                    </ul>
+                    <div class="warning-callout">
+                        <div class="warning-callout-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                        </div>
+                        <div class="warning-callout-content">
+                            <strong>Préparez</strong>
+                            3 histoires STAR adaptables à n'importe quelle question comportementale.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SLIDE 8 : CV / LINKEDIN / RÉSEAU ===== -->
+        <section class="slide" data-slide="8" aria-labelledby="s8-title">
+            <div class="slide-content">
+                <span class="slide-tag">Section 6</span>
+                <h2 id="s8-title">Techniques de recherche d'emploi</h2>
+                <p class="slide-lead">Qualité plutôt que quantité. Chaque candidature est un investissement.</p>
+                <div class="tips-grid-3col">
+                    <div class="tip-group">
+                        <h3>📄 CV orienté impact</h3>
+                        <ul class="bullet-list">
+                            <li><strong>Verbes d'action :</strong> conçu, piloté, optimisé, réduit, lancé…</li>
+                            <li><strong>Métriques :</strong> "+15% conversion", "80k€ budget", "TTR : 3j → 4h"</li>
+                            <li><strong>ATS :</strong> reprenez les termes exacts de l'offre</li>
+                            <li><strong>1 page</strong> si &lt;10 ans d'expérience, 2 pages max</li>
+                        </ul>
+                    </div>
+                    <div class="tip-group">
+                        <h3>💼 LinkedIn optimisé</h3>
+                        <ul class="bullet-list">
+                            <li><strong>Titre :</strong> votre proposition de valeur, pas votre poste</li>
+                            <li><strong>About :</strong> qui / ce que vous faites / ce que vous cherchez</li>
+                            <li><strong>Projets :</strong> liens GitHub, articles, conférences</li>
+                            <li><strong>Activité :</strong> 1 post utile/semaine &gt; 10 posts vides</li>
+                        </ul>
+                    </div>
+                    <div class="tip-group">
+                        <h3>🤝 Réseau actif</h3>
+                        <ul class="bullet-list">
+                            <li><strong>Message :</strong> court, respectueux, sans demander de faveur</li>
+                            <li><strong>Café d'info :</strong> 5 questions ouvertes, objectif = apprendre</li>
+                            <li><strong>Relances :</strong> +7 jours, 2 max, espacées de 2 semaines</li>
+                            <li><strong>60%</strong> des postes ne sont jamais publiés</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-box">
+                    <span class="ex-label">Exemple de message réseau</span>
+                    <em>"Bonjour [prénom], votre parcours chez [entreprise] m'intéresse. Seriez-vous disponible 20 min
+                        pour échanger sur votre expérience ? Merci."</em>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SLIDE 9 : NÉGOCIATION ===== -->
+        <section class="slide" data-slide="9" aria-labelledby="s9-title">
+            <div class="slide-content slide-two-col">
+                <div class="col-left">
+                    <span class="slide-tag">Section 7</span>
+                    <h2 id="s9-title">Négociation &amp; décision</h2>
+                    <p class="slide-lead">Évaluez une offre au-delà du salaire.</p>
+                    <ul class="icon-list">
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M9 2v14M2 9h14" stroke="var(--p4c)" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <div><strong>Attendez l'offre :</strong> ne donnez pas de chiffre en premier.</div>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M9 2v14M2 9h14" stroke="var(--p4c)" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <div><strong>Ancrez haut :</strong> fourchette 10–15% au-dessus de votre cible.</div>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M9 2v14M2 9h14" stroke="var(--p4c)" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <div><strong>Packagisez :</strong> remote, formation, équipement, bonus si salaire bloqué.
+                            </div>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M9 2v14M2 9h14" stroke="var(--p4c)" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <div><strong>BATNA :</strong> connaître votre meilleure alternative vous donne confiance.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-right">
+                    <h3 style="font-size:.95rem;margin-bottom:.6rem;">Scorecard de décision</h3>
+                    <p class="small">Notez chaque critère sur 10. Score max = 50.</p>
+                    <div class="scorecard" id="scorecard"></div>
+                    <div class="score-result"><strong>Score total : </strong><span id="scorecardTotal">0</span> / 50
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SLIDE 10 : PLAN 7 JOURS ===== -->
+        <section class="slide" data-slide="10" aria-labelledby="s10-title">
+            <div class="slide-content">
+                <span class="slide-tag">Section 8</span>
+                <h2 id="s10-title">Plan d'action — 7 jours pour démarrer</h2>
+                <p class="slide-lead">La meilleure stratégie est celle qu'on applique dès aujourd'hui.</p>
+                <div class="week-grid" id="weekPlan" role="list"></div>
+            </div>
+        </section>
+
+        <!-- ===== SLIDE 11 : CONCLUSION ===== -->
+        <section class="slide" data-slide="11" aria-labelledby="s11-title">
+            <div class="slide-bg-shapes" aria-hidden="true">
+                <div class="shape s1" style="opacity:.08;"></div>
+                <div class="shape s3" style="opacity:.05;"></div>
+            </div>
+            <div class="slide-content hero-content">
+                <div class="hero-badge">Conclusion</div>
+                <h2 id="s11-title" class="conclusion-title">Récapitulatif — 4 étapes clés</h2>
+                <div class="recap-row">
+                    <div class="recap-card c1">
+                        <h4>Marché</h4>
+                        <p>Identifier son secteur, ses métiers cibles, les indicateurs clés.</p>
+                    </div>
+                    <div class="recap-card c2">
+                        <h4>Objectifs</h4>
+                        <p>Diagnostic honnête + plan SMART sur 3 horizons temporels.</p>
+                    </div>
+                    <div class="recap-card c3">
+                        <h4>Recherche</h4>
+                        <p>CV impact, LinkedIn, réseau actif, entretiens.</p>
+                    </div>
+                    <div class="recap-card c4">
+                        <h4>Négociation</h4>
+                        <p>Scorecard multi-critères + plan 7 jours immédiatement actionnable.</p>
+                    </div>
+                </div>
+                <blockquote class="final-quote">
+                    "Le marché d'emploi récompense ceux qui se préparent, se positionnent et agissent avec méthode."
+                </blockquote>
+                <div class="final-actions">
+                    <button class="cta-btn" id="exportJson">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <rect x="2" y="11" width="12" height="3" rx="1" stroke="currentColor" stroke-width="1.5" />
+                        </svg>
+                        Exporter mon plan (JSON)
+                    </button>
+                    <button class="ghost-btn" id="backToStart">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                            <path d="M7 11V3M3 7l4-4 4 4" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        Retour au début
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SLIDE 12 : QUIZ INTERACTIF ===== -->
+        <section class="slide" data-slide="12" aria-labelledby="s12-title">
+            <div class="slide-content quiz-layout">
+                <div class="quiz-header">
+                    <span class="slide-tag">Section 9</span>
+                    <span class="quiz-counter" id="quizCounter">Question 1/16</span>
+                </div>
+                <h2 id="s12-title">Quiz : Testez vos connaissances</h2>
+                <p class="slide-lead" id="quizQuestionText">Selon vous, quel est l'élément le plus scruté par un
+                    recruteur sur LinkedIn avant
+                    même de lire votre CV ?</p>
+
+                <div class="quiz-container">
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-correct="false">
+                            <span class="option-letter">A</span>
+                            <span class="option-text">Le nombre de vos relations (+500)</span>
+                        </button>
+                        <button class="quiz-option" data-correct="true">
+                            <span class="option-letter">B</span>
+                            <span class="option-text">Votre titre de profil (Headline)</span>
+                        </button>
+                        <button class="quiz-option" data-correct="false">
+                            <span class="option-letter">C</span>
+                            <span class="option-text">Votre photo de couverture</span>
+                        </button>
+                        <button class="quiz-option" data-correct="false">
+                            <span class="option-letter">D</span>
+                            <span class="option-text">La liste de vos certifications</span>
+                        </button>
+                    </div>
+                    <div class="quiz-feedback" id="quizFeedback" hidden>
+                        <div class="feedback-icon"></div>
+                        <div class="feedback-content">
+                            <h4 class="feedback-title"></h4>
+                            <p class="feedback-text"></p>
+                        </div>
+                        <button class="quiz-next-btn" id="nextQuizQuestion" hidden>
+                            Continuer
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Results (Hidden by default) -->
+                <div id="quizResults" class="quiz-results" hidden>
+                    <div class="results-icon">🎉</div>
+                    <h3>Quiz Terminé !</h3>
+                    <p class="results-score">Votre score : <span id="quizScore">0</span> / <span
+                            id="quizTotal">16</span>
+                    </p>
+                    <p class="results-message">Félicitations ! Vous avez terminé la présentation.</p>
+                    <button class="ghost-btn" id="retryQuiz">Recommencer le quiz</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== MODALS ===== -->
+    <div class="modal" id="pdfModal" role="dialog" aria-modal="true" aria-labelledby="pdfModalTitle" hidden>
+        <div class="modal-backdrop" id="pdfBackdrop"></div>
+        <div class="modal-box">
+            <h3 id="pdfModalTitle">Téléchargement PDF</h3>
+            <p>Utilisez <kbd>Ctrl+P</kbd> / <kbd>⌘P</kbd> → "Enregistrer en PDF".</p>
+            <button class="cta-btn" id="closePdfModal">Compris !</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+    <div class="swipe-hint" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+        Glisser pour naviguer
+    </div>
+
+    <script type="module" src="./app.js"></script>
+</body>
+
+</html>
